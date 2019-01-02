@@ -1,6 +1,6 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://miskolc.uni.iit.hu/kovacsgergo/distributedsystemsdemo/model/generated"
-           elementFormDefault="qualified">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:complexType name="ExchangeRate">
         <xs:sequence>

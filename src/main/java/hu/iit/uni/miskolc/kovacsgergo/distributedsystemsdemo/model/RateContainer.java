@@ -3,10 +3,13 @@ package hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model;
 import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model.generated.ExchangeRate;
 import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model.generated.ObjectFactory;
 
+import javax.swing.text.html.HTMLDocument;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public final class RateContainer {
+public final class RateContainer implements Serializable {
 
     private static List<ExchangeRate> exchangeRateList;
 
@@ -27,12 +30,12 @@ public final class RateContainer {
         }
     }
 
-    static private String[] loadCodes() {
+    private static String[] loadCodes() {
         return new String[]{"BTC", "BCH", "USD", "EUR", "GBP", "JPY", "CAD", "AUD", "CNY", "CHF", "SEK", "NZD", "KRW",
                 "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AWG", "AZN", "BAM", "BBD"};
     }
 
-    static private String[] loadNames() {
+    private static String[] loadNames() {
         return new String[]{"Bitcoin", "Bitcoin Cash", "US Dollar", "Eurozone Euro", "Pound Sterling", "Japanese Yen",
                 "Canadian Dollar", "Australian Dollar", "Chinese Yuan", "Swiss Franc", "Swedish Krona",
                 "New Zealand Dollar", "South Korean Won", "UAE Dirham", "Afghan Afghani", "Albanian Lek",
@@ -40,7 +43,7 @@ public final class RateContainer {
                 "Azerbaijani Manat", "Bosnia-Herzegovina Convertible Mark", "Bangladeshi Taka"};
     }
 
-    static private double[] loadRates() {
+    private static double[] loadRates() {
         return new double[]{1.0, 23.664345, 3703.47, 3250.6, 2905.742562, 405859.745523, 5024.105181, 5275.593015,
                 25474.318395, 3635.881673, 33122.954254, 5520.151656, 4123445.986732, 13603.88598, 279414.193778,
                 400271.0376, 1792731.727045, 6576.45537, 1142916.76629, 138946.78746, 6666.231186, 6305.157675,
@@ -48,9 +51,37 @@ public final class RateContainer {
     }
 
 
-    static public List<ExchangeRate> getRates() {
+    public static List<ExchangeRate> getRates() {
         return exchangeRateList;
     }
+
+    public static void addRate(ExchangeRate rate){
+        exchangeRateList.add(rate);
+    }
+
+    public static ExchangeRate getRate(final String codeName){
+        Iterator iterator = exchangeRateList.iterator();
+        ExchangeRate tempExchangeRate = null;
+
+        while (iterator.hasNext()){
+            tempExchangeRate = (ExchangeRate) iterator.next();
+            if(tempExchangeRate.getCode().compareTo(codeName) == 0)
+                return tempExchangeRate;
+        }
+        return null;
+    }
+
+//    public ExchangeRates(ArrayList<ExchangeRate> exchangeRatesList) {
+//        this.exchangeRatesList = exchangeRatesList;
+//    }
+//
+//    public ExchangeRate getExchangeRate(int index){
+//        return exchangeRatesList.get(index);
+//    }
+//
+//    public ArrayList<ExchangeRate> getExchangeRates(){
+//        return (ArrayList<ExchangeRate>) exchangeRatesList.clone();
+//    }
 
 
 }
