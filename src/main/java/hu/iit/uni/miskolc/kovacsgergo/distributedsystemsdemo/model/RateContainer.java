@@ -1,9 +1,10 @@
 package hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model;
 
+import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.exception.classes.EntityNotFoundException;
 import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model.generated.ExchangeRate;
 import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model.generated.ObjectFactory;
 
-import javax.swing.text.html.HTMLDocument;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,16 +60,32 @@ public final class RateContainer implements Serializable {
         exchangeRateList.add(rate);
     }
 
-    public static ExchangeRate getRate(final String codeName){
+    public static ArrayList<ExchangeRate> getRate(final String codeName) throws EntityNotFoundException{
         Iterator iterator = exchangeRateList.iterator();
         ExchangeRate tempExchangeRate = null;
 
         while (iterator.hasNext()){
             tempExchangeRate = (ExchangeRate) iterator.next();
-            if(tempExchangeRate.getCode().compareTo(codeName) == 0)
-                return tempExchangeRate;
+            if(tempExchangeRate.getCode().compareTo(codeName) == 0){
+                ArrayList<ExchangeRate> tempExchangeRateList = new ArrayList<ExchangeRate>();
+                tempExchangeRateList.add(tempExchangeRate);
+                return tempExchangeRateList;
+            }
         }
-        return null;
+        throw new EntityNotFoundException(ExchangeRate.class, "code", codeName.toString());
+    }
+
+    public static void deleteRate(final String codeName){
+        Iterator iterator = exchangeRateList.iterator();
+        ExchangeRate tempExchangeRate = null;
+
+        while (iterator.hasNext()){
+            tempExchangeRate = (ExchangeRate) iterator.next();
+            if(tempExchangeRate.getCode().compareTo(codeName) == 0){
+               iterator.remove();
+               return;
+            }
+        }
     }
 
 //    public ExchangeRates(ArrayList<ExchangeRate> exchangeRatesList) {

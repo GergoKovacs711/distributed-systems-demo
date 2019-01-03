@@ -1,5 +1,6 @@
 package hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.controller;
 
+import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.exception.classes.EntityNotFoundException;
 import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model.RateContainer;
 import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model.generated.ExchangeRate;
 import hu.iit.uni.miskolc.kovacsgergo.distributedsystemsdemo.model.generated.ObjectFactory;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class RateController {
@@ -21,8 +20,6 @@ public class RateController {
     private static final String CREATE_RATE = "/rates/create";
     private static final String DELETE_RATE = "/rates/delete/{code}";
     private static final String TEST_RATE = "/rates/test";
-
-    //private static Map<Integer, ExchangeRate> exchangeData = new HashMap<Integer, ExchangeRate>();
 
     private static final Logger logger = LoggerFactory.getLogger(RateController.class);
 
@@ -49,17 +46,45 @@ public class RateController {
         ArrayList<ExchangeRate> exchangeRates = new ArrayList<>();
         exchangeRates.add(tempExchangeRate);
 
-                return exchangeRates;
+        logger.info("End getTestRate()");
+        return exchangeRates;
     }
 
     @RequestMapping(value = GET_RATE, method = RequestMethod.GET)
     @ResponseBody
-    public ExchangeRate getRate(@PathVariable @NotNull String code) {
+    public ArrayList<ExchangeRate> getRate(@PathVariable @NotNull String code) throws EntityNotFoundException {
         logger.info("Start getRate()");
 
-        ExchangeRate exchangeRate = RateContainer.getRate(code.toUpperCase());
+        ArrayList<ExchangeRate> exchangeRates = RateContainer.getRate(code);
 
-        return exchangeRate;
+        if (exchangeRates == null)
+            logger.info("response is null");
+
+        logger.info("End getRate()");
+        return exchangeRates;
     }
+
+    @RequestMapping(value = DELETE_RATE, method = RequestMethod.GET)
+    @ResponseBody
+    public void deleteRate(@PathVariable @NotNull String code) {
+        logger.info("Start deleteRate()");
+        RateContainer.deleteRate(code);
+        logger.info("End deleteRate()");
+    }
+
+
+    @RequestMapping(value = CREATE_RATE, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void createRate(@RequestBody ExchangeRate rate) {
+        logger.info("Start createRate()");
+
+        if (rate != null) {
+            RateContainer.addRate(rate);
+        } else {
+            logger.info("JSON is null!");
+        }
+        logger.info("End createRate()");
+    }
+
 
 }
