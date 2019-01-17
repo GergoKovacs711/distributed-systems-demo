@@ -22,10 +22,12 @@ public class RateController {
     private static final String TEST_RATE = "/rates/test";
 
     private static final Logger logger = LoggerFactory.getLogger(RateController.class);
+    private static int test_id = 0;
 
     @RequestMapping(value = GET_ALL_RATE, method = {RequestMethod.GET}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Collection<ExchangeRate> listRates() {
+
         return RateContainer.getRates();
     }
 
@@ -37,9 +39,11 @@ public class RateController {
         ObjectFactory objectFactory = new ObjectFactory();
         ExchangeRate tempExchangeRate = objectFactory.createExchangeRate();
 
-        tempExchangeRate.setCode("test_code");
-        tempExchangeRate.setName("test_name");
-        tempExchangeRate.setRate(69.69);
+        tempExchangeRate.setCode("test_code_" +
+                "" + test_id);
+        tempExchangeRate.setName("test_name_" + test_id);
+        tempExchangeRate.setRate(69.69 + test_id);
+        test_id++;
 
         RateContainer.addRate(tempExchangeRate);
 
@@ -64,12 +68,13 @@ public class RateController {
         return exchangeRates;
     }
 
-    @RequestMapping(value = DELETE_RATE, method = RequestMethod.GET)
+    @RequestMapping(value = DELETE_RATE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void deleteRate(@PathVariable @NotNull String code) {
+    public ArrayList<ExchangeRate> deleteRate(@PathVariable @NotNull String code) throws EntityNotFoundException {
         logger.info("Start deleteRate()");
-        RateContainer.deleteRate(code);
+        ArrayList<ExchangeRate> exchangeRate = RateContainer.deleteRate(code);
         logger.info("End deleteRate()");
+        return exchangeRate;
     }
 
 

@@ -66,39 +66,34 @@ public final class RateContainer implements Serializable {
 
         while (iterator.hasNext()){
             tempExchangeRate = (ExchangeRate) iterator.next();
+
             if(tempExchangeRate.getCode().compareTo(codeName) == 0){
+
                 ArrayList<ExchangeRate> tempExchangeRateList = new ArrayList<ExchangeRate>();
                 tempExchangeRateList.add(tempExchangeRate);
+
                 return tempExchangeRateList;
             }
         }
         throw new EntityNotFoundException(ExchangeRate.class, "code", codeName.toString());
     }
 
-    public static void deleteRate(final String codeName){
+    public static ArrayList<ExchangeRate> deleteRate(final String codeName) throws EntityNotFoundException{
         Iterator iterator = exchangeRateList.iterator();
         ExchangeRate tempExchangeRate = null;
 
         while (iterator.hasNext()){
             tempExchangeRate = (ExchangeRate) iterator.next();
+
             if(tempExchangeRate.getCode().compareTo(codeName) == 0){
                iterator.remove();
-               return;
+
+               ArrayList<ExchangeRate> tempExchangeRateList = new ArrayList<ExchangeRate>();
+               tempExchangeRateList.add(tempExchangeRate);
+
+               return tempExchangeRateList;
             }
         }
+        throw new EntityNotFoundException(ExchangeRate.class, "code", codeName.toString());
     }
-
-//    public ExchangeRates(ArrayList<ExchangeRate> exchangeRatesList) {
-//        this.exchangeRatesList = exchangeRatesList;
-//    }
-//
-//    public ExchangeRate getExchangeRate(int index){
-//        return exchangeRatesList.get(index);
-//    }
-//
-//    public ArrayList<ExchangeRate> getExchangeRates(){
-//        return (ArrayList<ExchangeRate>) exchangeRatesList.clone();
-//    }
-
-
 }
